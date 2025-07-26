@@ -12,14 +12,14 @@ app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.send("Welcome to Mailer!");
-})
+});
 
 app.post("/send-mail", async (req, res) => {
   try {
     const data = req.body;
-    if (data.to && data.subject && data.text) {
+    if (data.name && data.from && data.subject && data.text) {
       const emailRegEx = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      if (emailRegEx.test(data.to)) {
+      if (emailRegEx.test(data.from)) {
         const transport = nodemailer.createTransport({
           service: "gmail",
           auth: {
@@ -28,10 +28,14 @@ app.post("/send-mail", async (req, res) => {
           },
         });
         const mailOptions = {
-          from: process.env.MAIL_USER,
-          to: data.to,
+          from: data.from,
+          to: process.env.MAIL_USER,
           subject: data.subject,
-          html: data.text,
+          html: `
+            <p>Name: ${data.name}</p>
+            <p>Email: ${data.from}</p>
+            <p>Message: ${data.text}</p>
+          `,
         };
         transport.sendMail(mailOptions, function (error, info) {
           if (error) {
