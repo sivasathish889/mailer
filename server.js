@@ -10,7 +10,11 @@ app.use(express.static("public"));
 app.use(cors({ origin: "*", methods: ["GET", "POST"] }));
 app.use(bodyParser.json());
 
-app.get("/send-mail", async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Welcome to Mailer!");
+})
+
+app.post("/send-mail", async (req, res) => {
   try {
     const data = req.body;
     if (data.to && data.subject && data.text) {
