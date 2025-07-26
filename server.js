@@ -29,11 +29,11 @@ app.post("/send-mail", async (req, res) => {
         });
         const mailOptions = {
           from: data.from,
-          to: process.env.MAIL_USER,
+          to: process.env.TO_USER,
           subject: data.subject,
           html: `
-            <p>Name: ${data.name}</p>
-            <p>Email: ${data.from}</p>
+            <p>Name: ${data.name}</p><br>
+            <p>Email: ${data.from}</p><br>
             <p>Message: ${data.text}</p>
           `,
         };
@@ -49,7 +49,7 @@ app.post("/send-mail", async (req, res) => {
         res.status(400).json({ message: "Email is not valid" });
       }
     } else {
-      res.status(400).json({ message: "All fields are required" });
+      res.status(400).json({ message: "from, name, subject and text are required" });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
